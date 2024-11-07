@@ -1,0 +1,437 @@
+//caso 1
+
+class Produto {
+    nome: string;
+    preco: number;
+    categoria: string;
+
+    constructor(nome: string, preco: number, categoria: string) {
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
+    }
+
+    calcularDesconto(taxa: number): number {
+        return this.preco - (this.preco * taxa);
+    }
+}
+
+class Estoque {
+    produtos: { produto: Produto; quantidade: number }[] = [];
+
+    adicionarProduto(produto: Produto, quantidade: number) {
+        const itemEstoque = this.produtos.find(item => item.produto.nome === produto.nome);
+        if (itemEstoque) {
+            itemEstoque.quantidade += quantidade;
+        } else {
+            this.produtos.push({ produto, quantidade });
+        }
+    }
+
+    verificarEstoque(produto: Produto): number {
+        const itemEstoque = this.produtos.find(item => item.produto.nome === produto.nome);
+        return itemEstoque ? itemEstoque.quantidade : 0;
+    }
+}
+
+class Cliente {
+    nome: string;
+    telefone: string;
+    email: string;
+    compras: number = 0;
+    historicoCompras: { valor: number; data: Date }[] = [];
+
+    constructor(nome: string, telefone: string, email: string) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
+    registrarCompra(valor: number): void {
+        this.compras++;
+        this.historicoCompras.push({ valor, data: new Date() });
+    }
+
+    elegivelParaBrinde(): boolean {
+        return this.compras % 5 === 0;
+    }
+
+    mostrarHistoricoCompras(): void {
+        console.log(`Histórico de compras de ${this.nome}:`);
+        this.historicoCompras.forEach(compra => {
+            console.log(`- R$${compra.valor.toFixed(2)} em ${compra.data.toLocaleDateString()}`);
+        });
+    }
+}
+
+class Venda {
+    cliente: Cliente;
+    produtos: Produto[];
+    data: Date;
+
+    constructor(cliente: Cliente, produtos: Produto[], data: Date) {
+        this.cliente = cliente;
+        this.produtos = produtos;
+        this.data = data;
+    }
+
+    calcularTotal(): number {
+        return this.produtos.reduce((total, produto) => total + produto.preco, 0);
+    }
+}
+
+class Brinde {
+    descricao: string;
+    cliente: Cliente;
+
+    constructor(descricao: string, cliente: Cliente) {
+        this.descricao = descricao;
+        this.cliente = cliente;
+    }
+
+    entregarBrinde(): void {
+        console.log(`Brinde ${this.descricao} entregue para o cliente ${this.cliente.nome}`);
+    }
+}
+
+class Loja {
+    nome: string;
+    clientes: Cliente[] = [];
+
+    constructor(nome: string) {
+        this.nome = nome;
+    }
+
+    adicionarCliente(cliente: Cliente) {
+        this.clientes.push(cliente);
+    }
+
+    registrarCompra(cliente: Cliente, produtos: Produto[]) {
+        const venda = new Venda(cliente, produtos, new Date());
+        const total = venda.calcularTotal();
+        cliente.registrarCompra(total);
+        console.log(`Compra registrada: ${cliente.nome} comprou ${produtos.map(p => p.nome).join(', ')} por R$${total.toFixed(2)}`);
+    }
+
+    selecionarGanhadorBrinde(descricaoBrinde: string): void {
+        const elegiveis = this.clientes.filter(cliente => cliente.elegivelParaBrinde());
+        if (elegiveis.length > 0) {
+            const ganhador = elegiveis[Math.floor(Math.random() * elegiveis.length)];
+            const brinde = new Brinde(descricaoBrinde, ganhador);
+            brinde.entregarBrinde();
+        } else {
+            console.log("Nenhum cliente elegível para o brinde.");
+        }
+    }
+}
+
+const estoque = new Estoque();
+const produto1 = new Produto("Pão", 3.5, "Alimento");
+const produto2 = new Produto("Torta", 25.0, "Alimento");
+
+estoque.adicionarProduto(produto1, 10);
+estoque.adicionarProduto(produto2, 5);
+
+const loja = new Loja("Minha Loja");
+const cliente1 = new Cliente("Nathy", "1234-5678", "Nathy@email.com");
+const cliente2 = new Cliente("Luis", "2345-6789", "Luis@email.com");
+const cliente3 = new Cliente("Ana", "3456-7890", "Ana@email.com");
+
+loja.adicionarCliente(cliente1);
+loja.adicionarCliente(cliente2);
+loja.adicionarCliente(cliente3);
+
+const produtosComprados1 = [produto1, produto2];
+loja.registrarCompra(cliente1, produtosComprados1);
+
+const produtosComprados2 = [produto1, produto1, produto2]; 
+loja.registrarCompra(cliente2, produtosComprados2);
+
+const produtosComprados3 = [produto2];
+loja.registrarCompra(cliente3, produtosComprados3);
+
+cliente1.mostrarHistoricoCompras();
+cliente2.mostrarHistoricoCompras();
+cliente3.mostrarHistoricoCompras();
+
+loja.selecionarGanhadorBrinde("Caneca Exclusiva");
+
+//caso 2
+
+class Aluno {
+    nome: string;
+    telefone: string;
+    email: string;
+    plano: Plano;
+    instrutor: Instrutor;
+    aulas: Aula[] = [];
+
+    constructor(nome: string, telefone: string, email: string, plano: Plano, instrutor: Instrutor) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
+        this.plano = plano;
+        this.instrutor = instrutor;
+    }
+
+    registrarAula(aula: Aula): void {
+        this.aulas.push(aula);
+    }
+
+    mostrarHistoricoAulas(): void {
+        console.log(`Histórico de aulas de ${this.nome}:`);
+        this.aulas.forEach(aula => {
+            console.log(`- ${aula.descricao} em ${aula.data.toLocaleDateString()}`);
+        });
+    }
+}
+
+class Plano {
+    tipo: string; 
+    valor: number;
+
+    constructor(tipo: string, valor: number) {
+        this.tipo = tipo;
+        this.valor = valor;
+    }
+}
+
+class Instrutor {
+    nome: string;
+    especialidade: string;
+
+    constructor(nome: string, especialidade: string) {
+        this.nome = nome;
+        this.especialidade = especialidade;
+    }
+}
+
+class Aula {
+    descricao: string;
+    data: Date;
+    tipo: string; 
+
+    constructor(descricao: string, tipo: string) {
+        this.descricao = descricao;
+        this.tipo = tipo;
+        this.data = new Date();
+    }
+}
+
+class Sala {
+    nome: string;
+    equipamentos: string[];
+
+    constructor(nome: string, equipamentos: string[]) {
+        this.nome = nome;
+        this.equipamentos = equipamentos;
+    }
+
+    adicionarEquipamento(equipamento: string): void {
+        this.equipamentos.push(equipamento);
+    }
+
+    listarEquipamentos(): void {
+        console.log(`Equipamentos na sala ${this.nome}: ${this.equipamentos.join(', ')}`);
+    }
+}
+
+class Academia {
+    nome: string;
+    alunos: Aluno[] = [];
+    salas: Sala[] = [];
+    instrutores: Instrutor[] = [];
+
+    constructor(nome: string) {
+        this.nome = nome;
+    }
+
+    adicionarAluno(aluno: Aluno) {
+        this.alunos.push(aluno);
+    }
+
+    adicionarSala(sala: Sala) {
+        this.salas.push(sala);
+    }
+
+    adicionarInstrutor(instrutor: Instrutor) {
+        this.instrutores.push(instrutor);
+    }
+}
+
+const academia = new Academia("Academia Fitness");
+
+const planoMensal = new Plano("Mensal", 100);
+const planoAnual = new Plano("Anual", 1000);
+
+const instrutor1 = new Instrutor("Carlos", "Musculação");
+const instrutor2 = new Instrutor("Ana", "Natação");
+
+const aluno1 = new Aluno("Nathy", "1234-5678", "nathy@email.com", planoMensal, instrutor1);
+const aluno2 = new Aluno("Luis", "2345-6789", "Luis@email.com", planoAnual, instrutor2);
+
+academia.adicionarAluno(aluno1);
+academia.adicionarAluno(aluno2);
+
+const aulaMusculacao = new Aula("Treino de força", "Musculação");
+const aulaNatacao = new Aula("Aula de natação", "Natação");
+
+aluno1.registrarAula(aulaMusculacao);
+aluno2.registrarAula(aulaNatacao);
+
+aluno1.mostrarHistoricoAulas();
+aluno2.mostrarHistoricoAulas();
+
+const sala1 = new Sala("Sala de Musculação", ["Haltere", "Barra", "Cadeira Extensora"]);
+const sala2 = new Sala("Piscina", ["Flutuador", "Bóia"]);
+
+academia.adicionarSala(sala1);
+academia.adicionarSala(sala2);
+
+sala1.listarEquipamentos();
+sala2.listarEquipamentos();
+
+
+//caso 3
+
+class Morador {
+    nome: string;
+    apartamento: string;
+    telefone: string;
+    email: string;
+
+    constructor(nome: string, apartamento: string, telefone: string, email: string) {
+        this.nome = nome;
+        this.apartamento = apartamento;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
+    mostrarInformacoes(): void {
+        console.log(`Morador: ${this.nome}, Apartamento: ${this.apartamento}, Telefone: ${this.telefone}, Email: ${this.email}`);
+    }
+}
+
+class Funcionario {
+    nome: string;
+    cargo: string;
+    telefone: string;
+
+    constructor(nome: string, cargo: string, telefone: string) {
+        this.nome = nome;
+        this.cargo = cargo;
+        this.telefone = telefone;
+    }
+
+    mostrarInformacoes(): void {
+        console.log(`Funcionário: ${this.nome}, Cargo: ${this.cargo}, Telefone: ${this.telefone}`);
+    }
+}
+
+class AreaComum {
+    nome: string;
+    capacidade: number;
+    equipamentos: string[];
+
+    constructor(nome: string, capacidade: number, equipamentos: string[]) {
+        this.nome = nome;
+        this.capacidade = capacidade;
+        this.equipamentos = equipamentos;
+    }
+
+    listarEquipamentos(): void {
+        console.log(`Equipamentos da área comum ${this.nome}: ${this.equipamentos.join(', ')}`);
+    }
+}
+
+class Servico {
+    nome: string;
+    descricao: string;
+    responsavel: Funcionario;
+
+    constructor(nome: string, descricao: string, responsavel: Funcionario) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.responsavel = responsavel;
+    }
+
+    mostrarInformacoes(): void {
+        console.log(`Serviço: ${this.nome}, Descrição: ${this.descricao}, Responsável: ${this.responsavel.nome}`);
+    }
+}
+
+class Condominio {
+    nome: string;
+    moradores: Morador[] = [];
+    funcionarios: Funcionario[] = [];
+    areasComuns: AreaComum[] = [];
+    servicos: Servico[] = [];
+
+    constructor(nome: string) {
+        this.nome = nome;
+    }
+
+    adicionarMorador(morador: Morador): void {
+        this.moradores.push(morador);
+    }
+
+    adicionarFuncionario(funcionario: Funcionario): void {
+        this.funcionarios.push(funcionario);
+    }
+
+    adicionarAreaComum(area: AreaComum): void {
+        this.areasComuns.push(area);
+    }
+
+    adicionarServico(servico: Servico): void {
+        this.servicos.push(servico);
+    }
+
+    listarMoradores(): void {
+        console.log(`Moradores do condomínio ${this.nome}:`);
+        this.moradores.forEach(morador => morador.mostrarInformacoes());
+    }
+
+    listarFuncionarios(): void {
+        console.log(`Funcionários do condomínio ${this.nome}:`);
+        this.funcionarios.forEach(funcionario => funcionario.mostrarInformacoes());
+    }
+
+    listarAreasComuns(): void {
+        console.log(`Áreas comuns do condomínio ${this.nome}:`);
+        this.areasComuns.forEach(area => area.listarEquipamentos());
+    }
+
+    listarServicos(): void {
+        console.log(`Serviços do condomínio ${this.nome}:`);
+        this.servicos.forEach(servico => servico.mostrarInformacoes());
+    }
+}
+
+const condominio = new Condominio("Condomínio Jardim das Flores");
+
+const morador1 = new Morador("Nathy", "101", "1234-5678", "nathy@email.com");
+const morador2 = new Morador("Luís", "102", "2345-6789", "Luís@email.com");
+
+const funcionario1 = new Funcionario("Ana", "Síndica", "1111-2222");
+const funcionario2 = new Funcionario("João", "Zelador", "3333-4444");
+
+const area1 = new AreaComum("Piscina", 20, ["Espreguiçadeiras", "Guarda-Sol"]);
+const area2 = new AreaComum("Salão de Festas", 50, ["Mesas", "Cadeiras", "Som"]);
+
+const servico1 = new Servico("Limpeza", "Serviço de limpeza diária", funcionario2);
+const servico2 = new Servico("Segurança", "Serviço de segurança 24h", funcionario1);
+
+condominio.adicionarMorador(morador1);
+condominio.adicionarMorador(morador2);
+condominio.adicionarFuncionario(funcionario1);
+condominio.adicionarFuncionario(funcionario2);
+condominio.adicionarAreaComum(area1);
+condominio.adicionarAreaComum(area2);
+condominio.adicionarServico(servico1);
+condominio.adicionarServico(servico2);
+
+condominio.listarMoradores();
+condominio.listarFuncionarios();
+condominio.listarAreasComuns();
+condominio.listarServicos();

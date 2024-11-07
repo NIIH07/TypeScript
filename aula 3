@@ -1,0 +1,156 @@
+
+```ts
+// Classe base
+class Veiculo {
+    marca: string;
+    ano: number;
+
+    constructor(marca: string, ano: number) {
+        this.marca = marca;
+        this.ano = ano;
+    }
+
+    mover(): void {
+        console.log("O veículo está se movendo.");
+    }
+
+    toString(): string {
+        return `${this.marca} (${this.ano})`;
+    }
+}
+
+
+class Carro extends Veiculo {
+    portas: number;
+
+    constructor(marca: string, ano: number, portas: number) {
+        super(marca, ano);
+        this.portas = portas;
+    }
+
+    
+    mover(): void {
+        console.log(`O carro ${this.marca} está dirigindo na estrada.`);
+    }
+
+    toString(): string {
+        return `Carro: ${this.marca} (${this.ano}), ${this.portas} portas`;
+    }
+}
+
+
+class Bicicleta extends Veiculo {
+    tipo: string;
+
+    constructor(marca: string, ano: number, tipo: string) {
+        super(marca, ano);
+        this.tipo = tipo;
+    }
+
+    
+    mover(): void {
+        console.log(`A bicicleta ${this.marca} está sendo pedalada.`);
+    }
+
+    toString(): string {
+        return `Bicicleta: ${this.marca} (${this.ano}), Tipo: ${this.tipo}`;
+    }
+}
+
+
+const meuCarro = new Carro("Toyota", 2021, 4);
+const minhaBicicleta = new Bicicleta("Caloi", 2020, "Mountain Bike");
+
+meuCarro.mover();          
+minhaBicicleta.mover();   
+
+console.log(meuCarro.toString());        
+console.log(minhaBicicleta.toString());   
+
+```
+
+
+
+<details><summary><b>Output</b></summary>
+
+```ts
+"use strict";
+// Classe base
+class Veiculo {
+    constructor(marca, ano) {
+        this.marca = marca;
+        this.ano = ano;
+    }
+    mover() {
+        console.log("O veículo está se movendo.");
+    }
+    toString() {
+        return `${this.marca} (${this.ano})`;
+    }
+}
+class Carro extends Veiculo {
+    constructor(marca, ano, portas) {
+        super(marca, ano);
+        this.portas = portas;
+    }
+    mover() {
+        console.log(`O carro ${this.marca} está dirigindo na estrada.`);
+    }
+    toString() {
+        return `Carro: ${this.marca} (${this.ano}), ${this.portas} portas`;
+    }
+}
+class Bicicleta extends Veiculo {
+    constructor(marca, ano, tipo) {
+        super(marca, ano);
+        this.tipo = tipo;
+    }
+    mover() {
+        console.log(`A bicicleta ${this.marca} está sendo pedalada.`);
+    }
+    toString() {
+        return `Bicicleta: ${this.marca} (${this.ano}), Tipo: ${this.tipo}`;
+    }
+}
+const meuCarro = new Carro("Toyota", 2021, 4);
+const minhaBicicleta = new Bicicleta("Caloi", 2020, "Mountain Bike");
+meuCarro.mover();
+minhaBicicleta.mover();
+console.log(meuCarro.toString());
+console.log(minhaBicicleta.toString());
+
+```
+
+
+</details>
+
+
+<details><summary><b>Compiler Options</b></summary>
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "alwaysStrict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "target": "ES2017",
+    "jsx": "react",
+    "module": "ESNext",
+    "moduleResolution": "node"
+  }
+}
+```
+
+
+</details>
+
+**Playground Link:** [Provided](https://www.typescriptlang.org/play/?#code/PTAEGEBsEMGdYKagEZwQWAFAGMb1AGoICW2ArpAPagDeWoDoAttAE7bQBcosALq8QB2AcwDc9RtEGVugsk2QJW4zBIbZKgvqzLZelVgAoW7Lj35DhAGlBSZoOQqUBKWmsYNeAC2KwAdCYcoAC8zGwcKh4e3r5+diG20pGMAL5Y7kyUAG5Khs7cWZTEACZumFGMGlqUkAh+VMKGAEQA8qA5ALfkVKAIfACHPEiZOYLFlH5NzskMaarljPoAyhYiedzalmUVDKwIvGSsgqAABgAkNDH+gdApoIYXV3HSKc4nM6Bzc+k4eLAQbFY1AQAA9eAgxv8iKQKNQ6AsGAAHAy8OCyeSKZQ-DxVbS6fRGG4bVbWRL2RyYmzI1io2DopysVzwnY8MiI3I3Gx2abuaI+fzU2kJQVwD7fBGgDLZXL5dpFUrMna4mp1BqGE5tDisIGgR78gLhW69AagYrEATCITjBzQY38aDFaB+E48iXi6KUFYCNayzYibY7PYHI6ncCA+x62I3O4PS76uyvGyRgUouB3EWwd7uL4-LC4OD-ABCpFItVRvTBEOKUJI3Th7l4xGRxO9YmxlU0eL0BmMhpbli50nplNAjeb5lbTN5jFgbI5hsHlFdLKeY+ooTXYvbDClOSMssKJQDFWVtXqlEaJwAgigS7h9rbkwbTHc+rxBogxtR2Y6YI7ncuqTbqOnokusE5bIqFRBocxwnMW2Clg+3BPtG9xPgmzg2AAKk2EZxrEa4pFmbpYOKeadrwzAIGQYbauuDgIAA7gC9HNNhlAAJ6UKiTQ2AATAADPxACMNgACyuriVFMEIXjQAhSHlqEgjMaAin3qizRhlQxB8aAQlCTYTQALKUGQgiokI6nEAA1ggUwqFgTA0XRQIBNK+6iCyO6YLJgjyRpZZOiMMreb5FHVGeaoubR4Z+MsYHONMLKRbAKrno0-mBXewUJaBrZ5ClvlAA)
+      
